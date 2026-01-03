@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialCartState = {
+  item: [],
   price: 6,
-  quantity: 0,
-  total: 0,
-  isShowCart: false,
+  totalQuantity: 0,
   isShowItem: false,
 };
 
@@ -12,8 +11,22 @@ const cartSlice = createSlice({
   name: "Cart Slide",
   initialState: initialCartState,
   reducers: {
-    addItem(state) {
-      state.quantity++;
+    addItem(state, action) {
+      const newItem = action.payload;
+      const existingItem = state.item.find((item) => item.id === newItem.id);
+      if (!existingItem) {
+        state.item.push({
+          itemId: newItem.id,
+          price: newItem.price,
+          quantity: 1,
+          totalPrice: newItem.price,
+          name: newItem.title,
+        });
+      } else {
+        existingItem.quantity++;
+        existingItem.totalPrice += newItem.price;
+      }
+      state.totalQuantity++;
       state.isShowItem = true;
     },
     removeItem(state) {
@@ -26,9 +39,6 @@ const cartSlice = createSlice({
     },
     total(state) {
       state.total = state.price * state.quantity;
-    },
-    showCart(state) {
-      state.isShowCart = !state.isShowCart;
     },
   },
 });
