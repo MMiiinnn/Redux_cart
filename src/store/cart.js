@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialCartState = {
-  item: [],
+  items: [],
   price: 6,
   totalQuantity: 0,
-  isShowItem: false,
 };
 
 const cartSlice = createSlice({
@@ -13,10 +12,11 @@ const cartSlice = createSlice({
   reducers: {
     addItem(state, action) {
       const newItem = action.payload;
-      const existingItem = state.item.find((item) => item.id === newItem.id);
+      const existingItem = state.items.find((item) => item.id === newItem.id);
+      state.totalQuantity++;
       if (!existingItem) {
-        state.item.push({
-          itemId: newItem.id,
+        state.items.push({
+          id: newItem.id,
           price: newItem.price,
           quantity: 1,
           totalPrice: newItem.price,
@@ -26,19 +26,17 @@ const cartSlice = createSlice({
         existingItem.quantity++;
         existingItem.totalPrice += newItem.price;
       }
-      state.totalQuantity++;
-      state.isShowItem = true;
     },
-    removeItem(state) {
-      if (state.quantity >= 1) {
-        state.quantity--;
+    removeItem(state, action) {
+      const id = action.payload.id;
+      const existingItem = state.items.find((item) => item.id === id);
+      state.totalQuantity--;
+      if (existingItem.quantity === 1) {
+        state.items = state.items.filter((item) => item.id !== existingItem.id);
+      } else {
+        existingItem.quantity--;
+        existingItem.totalPrice -= existingItem.price;
       }
-      if (state.quantity === 0) {
-        state.isShowItem = false;
-      }
-    },
-    total(state) {
-      state.total = state.price * state.quantity;
     },
   },
 });

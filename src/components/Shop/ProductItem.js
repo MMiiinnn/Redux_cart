@@ -5,13 +5,14 @@ import Card from "../UI/Card";
 import classes from "./ProductItem.module.css";
 
 const ProductItem = (props) => {
-  const { title, price, description } = props;
+  const { title, price, description, id } = props;
   const dispatch = useDispatch();
 
-  function handleClick() {
-    dispatch(cartActions.addItem());
-    dispatch(cartActions.total());
+  function addToCartHandler() {
+    dispatch(cartActions.addItem({ title, price, id }));
   }
+
+  // console.log(price);
 
   return (
     <li className={classes.item}>
@@ -22,7 +23,7 @@ const ProductItem = (props) => {
         </header>
         <p>{description}</p>
         <div className={classes.actions}>
-          <button onClick={handleClick}>Add to Cart</button>
+          <button onClick={addToCartHandler}>Add to Cart</button>
         </div>
       </Card>
     </li>

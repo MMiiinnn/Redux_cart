@@ -1,19 +1,42 @@
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import ProductItem from "./ProductItem";
 import classes from "./Products.module.css";
 
-const Products = (props) => {
-  const price = useSelector((state) => state.cart.price);
+const DUMMY_PRODUCTS = [
+  {
+    id: "p1",
+    price: 6,
+    title: "My first book",
+    description: "This is my favourate book",
+  },
+  {
+    id: "p2",
+    price: 7,
+    title: "My second book",
+    description: "This is my favourate book",
+  },
+  {
+    id: "p3",
+    price: 8,
+    title: "My third book",
+    description: "This is my favourate book",
+  },
+];
 
+const Products = (props) => {
   return (
     <section className={classes.products}>
       <h2>Buy your favorite products</h2>
       <ul>
-        <ProductItem
-          title="Test"
-          price={price}
-          description="This is a first product - amazing!"
-        />
+        {DUMMY_PRODUCTS.map((product) => (
+          <ProductItem
+            key={product.id}
+            id={product.id}
+            title={product.title}
+            price={product.price}
+            description={product.description}
+          />
+        ))}
       </ul>
     </section>
   );
